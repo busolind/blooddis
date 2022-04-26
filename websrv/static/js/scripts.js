@@ -19,7 +19,7 @@ form.onsubmit = async (e) => {
       var innerp = document.createElement('h2');
       innerp.innerText = 'Your prediction is: ' + data['prediction'];
       innerp.classList.add('text-info');
-      innerp.classList.add('animate__animated', 'animate__bounceInLeft');
+      innerp.classList.add('animate__animated', 'animate__zoomIn');
       div.appendChild(innerp);
     });
   } catch (error) {
