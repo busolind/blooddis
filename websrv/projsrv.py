@@ -98,16 +98,19 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                                     'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': self.headers['Content-Type'], })
             #print(type(form))
             file = form["file"].file
-            npimg = np.fromfile(file, np.uint8)
-            image = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)#converting BGR image to RGB
-            image_size = (120,120)
-            image = cv2.resize(image, image_size)#resizing the input image acc to model input size
-            image = image.astype('float32')
-            image /= 255
-            image = np.expand_dims(image, axis=0)
-            pred = np.argmax(model.predict(image))
-        else: return False
+            try:
+                npimg = np.fromfile(file, np.uint8)
+                image = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)#converting BGR image to RGB
+                image_size = (120,120)
+                image = cv2.resize(image, image_size)#resizing the input image acc to model input size
+                image = image.astype('float32')
+                image /= 255
+                image = np.expand_dims(image, axis=0)
+                pred = np.argmax(model.predict(image))
+            except:
+                return False, ''
+        else: return False, ''
         return (True, class_names[pred])
 
 
