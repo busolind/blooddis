@@ -8,7 +8,6 @@ function resetResultDiv() {
 
 form.onsubmit = async (e) => {
   e.preventDefault();
-  const form = e.currentTarget;
   const url = form.action;
 
   try {
@@ -23,13 +22,7 @@ form.onsubmit = async (e) => {
 
           resultDiv.classList.remove("d-none");
           resultDiv.innerHTML = "";
-          resultDiv.classList.add(
-            "border",
-            "border-success",
-            "rounded",
-            "animate__animated",
-            "animate__fadeIn"
-          );
+          resultDiv.classList.add("border", "border-success", "rounded", "animate__animated", "animate__fadeIn");
           var innerp = document.createElement("h2");
           innerp.innerText = "Your prediction is: " + data["prediction"];
           innerp.classList.add("text-info");

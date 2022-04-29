@@ -34,6 +34,8 @@ import cv2
 import numpy as np
 import json
 import os
+from datetime import datetime
+import random, string
 
 # Change this to serve on a different port
 PORT = 44444
@@ -97,9 +99,10 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             form = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={
                                     'REQUEST_METHOD': 'POST', 'CONTENT_TYPE': self.headers['Content-Type'], })
             #print(type(form))
-            file = form["file"].file
+            fileobj = form["file"]
+            #readfile = fileobj.file.read()
             try:
-                npimg = np.fromfile(file, np.uint8)
+                npimg = np.fromfile(fileobj.file, np.uint8)
                 image = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)#converting BGR image to RGB
                 image_size = (120,120)
@@ -109,6 +112,18 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 image = np.expand_dims(image, axis=0)
                 pred = np.argmax(model.predict(image))
             except:
+                return False, ''
+            try: #Image saving part
+                if form.getvalue('shareImageCheckbox') == 'on':
+                    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploaded')
+                    if not os.path.isdir(root):
+                        os.makedirs(root)
+                    fn = str(int(datetime.timestamp(datetime.now()))) + '-' + ''.join(random.choices(string.ascii_letters + string.digits, k=8)) + os.path.splitext(fileobj.filename)[1] #integer timestamp + 8 random chars + extension
+                    fileobj.file.seek(0)
+                    open(os.path.join(root, fn), 'wb').write(fileobj.file.read())
+                    #cv2.imwrite(os.path.join(root, fn), image)
+            except Exception as e:
+                print(e)
                 return False, ''
         else: return False, ''
         return (True, class_names[pred])
