@@ -24,7 +24,7 @@ form.onsubmit = async (e) => {
           resultDiv.innerHTML = "";
           resultDiv.classList.add("border", "border-success", "rounded", "animate__animated", "animate__fadeIn");
           var innerp = document.createElement("h2");
-          innerp.innerText = "Your prediction is: " + data["prediction"];
+          innerp.innerText = "Your result is: " + data["prediction"];
           innerp.classList.add("text-info");
           innerp.classList.add("animate__animated", "animate__zoomIn");
           resultDiv.appendChild(innerp);
