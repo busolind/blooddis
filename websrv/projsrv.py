@@ -52,8 +52,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # print(root)
         if self.path == '/':
             filename = root + '/index.html'
-        elif self.path == '/legal':
-            filename = root + '/legal.html'
+        # elif self.path == '/legal':
+        #    filename = root + '/legal.html'
         else:
             filename = root + self.path
 
@@ -66,6 +66,8 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'application/javascript')
         elif filename[-4:] == '.ico':
             self.send_header('Content-type', 'image/x-icon')
+        elif filename[-4:] == '.pdf':
+            self.send_header('Content-type', 'application/pdf')
         else:
             self.send_header('Content-type', 'text/html')
         self.end_headers()
